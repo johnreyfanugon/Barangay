@@ -30,6 +30,10 @@ $rememberedEmail = $_COOKIE['remember_email'] ?? '';
         <div class="hero-badge">Community Wellness Platform</div>
         <h1>Barangay Community Health Check Details System</h1>
         <p>A secure, responsive, modern platform for patient care, health records, and data-driven monitoring.</p>
+        <div class="hero-panel">
+            <h3>Mission &amp; Vision</h3>
+            <p>Deliver compassionate, efficient, and data-driven community healthcare through trusted digital services.</p>
+        </div>
         <ul class="hero-points">
             <li>Realtime insights dashboard</li>
             <li>Secure role-based access</li>

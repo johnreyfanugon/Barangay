@@ -36,16 +36,13 @@ function old(string $key, string $default = ''): string
     return isset($_POST[$key]) ? trim((string)$_POST[$key]) : $default;
 }
 
-function generatePatientUniqueId(mysqli $db): string
+function generatePatientUniqueId(PDO $db): string
 {
     do {
         $candidate = 'PT-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(2)));
-        $stmt = $db->prepare('SELECT id FROM patients WHERE unique_id = ? LIMIT 1');
-        $stmt->bind_param('s', $candidate);
-        $stmt->execute();
-        $res = $stmt->get_result();
-        $exists = $res->num_rows > 0;
-        $stmt->close();
+        $stmt = $db->prepare('SELECT id FROM patients WHERE unique_id = :uid LIMIT 1');
+        $stmt->execute(['uid' => $candidate]);
+        $exists = (bool)$stmt->fetch();
     } while ($exists);
     return $candidate;
 }

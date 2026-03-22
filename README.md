@@ -1,6 +1,6 @@
 # Barangay Community Health Check Details System
 
-A production-ready PHP + MySQL web application with secure authentication, role-based access, patient/health record CRUD, dashboard analytics, and printable reports.
+A production-ready PHP + PostgreSQL web application with secure authentication, role-based access, patient/health record CRUD, dashboard analytics, and printable reports.
 
 ## Tech Stack
 
@@ -8,7 +8,7 @@ A production-ready PHP + MySQL web application with secure authentication, role-
 - CSS3 (responsive glassmorphism + nature-inspired theme)
 - Vanilla JavaScript
 - PHP 8+
-- MySQL
+- PostgreSQL
 - Chart.js
 
 ## Project Structure
@@ -22,8 +22,8 @@ A production-ready PHP + MySQL web application with secure authentication, role-
 
 ## Setup (Local)
 
-1. Copy `env.example` values into your environment (XAMPP/WAMP Apache config, shell env, or hosting vars).
-2. Create MySQL DB and import:
+1. Copy `env.example` values into your environment (Apache config, shell env, or hosting vars).
+2. Create PostgreSQL DB and import:
    - `database/schema.sql`
 3. Serve the project with Apache/PHP.
 4. Open `http://localhost/<project-folder>/`
@@ -53,7 +53,7 @@ Default seeded users:
    - `git branch -M main`
    - `git push -u origin main`
 
-## Render Deployment
+## Render Deployment (PostgreSQL)
 
 This project includes:
 - `Dockerfile`
@@ -66,12 +66,12 @@ Steps:
 4. Set environment variables in Render dashboard:
    - `APP_ENV=production`
    - `APP_NAME=Barangay Community Health Check Details System`
-   - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`
-   - Do not set `DB_HOST` to `127.0.0.1` on Render; use your external MySQL host.
-5. Use an external MySQL provider (Render does not provide managed MySQL in all plans/regions), then import `database/schema.sql`.
+   - `DATABASE_URL` (recommended; full postgres URL)
+   - Optional fallback: `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`
+5. Import `database/schema.sql` into your Render Postgres DB.
 
 ### Troubleshooting “Connection refused”
-- If you see “Connection refused” on Render, it usually means the service is trying to reach MySQL at `127.0.0.1`. Set `DB_HOST` to your provider’s hostname and ensure network access/allowlisting is correct.
+- If you see “Connection refused” on Render, it usually means the service is trying to reach PostgreSQL at localhost. Set `DATABASE_URL` or `PGHOST` correctly.
 - The app now shows a friendly error screen with tips if the DB is unreachable.
 
 ## Feature Highlights

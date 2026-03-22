@@ -9,13 +9,11 @@ $db = getDb();
 $search = trim((string)($_GET['search'] ?? ''));
 
 if ($search !== '') {
-    $stmt = $db->prepare("SELECT * FROM patients WHERE name LIKE CONCAT('%', ?, '%') OR unique_id LIKE CONCAT('%', ?, '%') ORDER BY id DESC");
-    $stmt->bind_param('ss', $search, $search);
-    $stmt->execute();
-    $patients = $stmt->get_result();
-    $stmt->close();
+    $stmt = $db->prepare("SELECT * FROM patients WHERE name ILIKE :term OR unique_id ILIKE :term ORDER BY id DESC");
+    $stmt->execute(['term' => '%' . $search . '%']);
+    $patients = $stmt->fetchAll();
 } else {
-    $patients = $db->query('SELECT * FROM patients ORDER BY id DESC');
+    $patients = $db->query('SELECT * FROM patients ORDER BY id DESC')->fetchAll();
 }
 
 $pageTitle = 'Patient Management';
@@ -32,7 +30,7 @@ include __DIR__ . '/includes/header.php';
             <tr><th>Unique ID</th><th>Name</th><th>Birthdate</th><th>Age</th><th>Gender</th><th>Address</th><th>Contact</th><th>Actions</th></tr>
             </thead>
             <tbody>
-            <?php while ($row = $patients->fetch_assoc()): ?>
+            <?php foreach ($patients as $row): ?>
                 <tr>
                     <td><?php echo e($row['unique_id']); ?></td>
                     <td><?php echo e($row['name']); ?></td>
@@ -51,7 +49,7 @@ include __DIR__ . '/includes/header.php';
                         </form>
                     </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>

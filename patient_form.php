@@ -12,11 +12,8 @@ $patient = ['id' => 0, 'name' => '', 'birthdate' => '', 'gender' => '', 'address
 
 if ($isEdit) {
     $stmt = $db->prepare('SELECT * FROM patients WHERE id = ? LIMIT 1');
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    $patient = $res->fetch_assoc() ?: $patient;
-    $stmt->close();
+    $stmt->execute([$id]);
+    $patient = $stmt->fetch() ?: $patient;
 }
 
 $pageTitle = $isEdit ? 'Edit Patient' : 'Add Patient';

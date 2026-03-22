@@ -8,22 +8,24 @@ requireLogin();
 $db = getDb();
 $patientId = isset($_GET['patient_id']) ? (int)$_GET['patient_id'] : 0;
 $editingId = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
-$patients = $db->query('SELECT id, unique_id, name FROM patients ORDER BY name');
+$patients = $db->query('SELECT id, unique_id, name FROM patients ORDER BY name')->fetchAll();
 
-$recordsStmt = $db->prepare('SELECT hr.*, p.name AS patient_name, p.unique_id FROM health_records hr INNER JOIN patients p ON p.id = hr.patient_id' . ($patientId ? ' WHERE hr.patient_id = ?' : '') . ' ORDER BY hr.date DESC, hr.id DESC');
+$recordsSql = 'SELECT hr.*, p.name AS patient_name, p.unique_id FROM health_records hr INNER JOIN patients p ON p.id = hr.patient_id';
+$recordsParams = [];
 if ($patientId) {
-    $recordsStmt->bind_param('i', $patientId);
+    $recordsSql .= ' WHERE hr.patient_id = :patient_id';
+    $recordsParams['patient_id'] = $patientId;
 }
-$recordsStmt->execute();
-$records = $recordsStmt->get_result();
+$recordsSql .= ' ORDER BY hr.date DESC, hr.id DESC';
+$recordsStmt = $db->prepare($recordsSql);
+$recordsStmt->execute($recordsParams);
+$records = $recordsStmt->fetchAll();
 
 $editing = null;
 if ($editingId > 0) {
     $stmt = $db->prepare('SELECT * FROM health_records WHERE id = ? LIMIT 1');
-    $stmt->bind_param('i', $editingId);
-    $stmt->execute();
-    $editing = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
+    $stmt->execute([$editingId]);
+    $editing = $stmt->fetch();
 }
 
 $pageTitle = 'Health Records';
@@ -38,11 +40,11 @@ include __DIR__ . '/includes/header.php';
         <label>Patient
             <select name="patient_id" required>
                 <option value="">Select Patient</option>
-                <?php while ($p = $patients->fetch_assoc()): ?>
+                <?php foreach ($patients as $p): ?>
                     <option value="<?php echo (int)$p['id']; ?>" <?php echo (int)($editing['patient_id'] ?? $patientId) === (int)$p['id'] ? 'selected' : ''; ?>>
                         <?php echo e($p['name'] . ' (' . $p['unique_id'] . ')'); ?>
                     </option>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </select>
         </label>
         <label>Date <input type="date" name="date" required value="<?php echo e($editing['date'] ?? date('Y-m-d')); ?>"></label>
@@ -65,13 +67,13 @@ include __DIR__ . '/includes/header.php';
             <select name="patient_id" onchange="this.form.submit()">
                 <option value="0">All Patients</option>
                 <?php
-                $patientsFilter = $db->query('SELECT id, name, unique_id FROM patients ORDER BY name');
-                while ($pf = $patientsFilter->fetch_assoc()):
+                $patientsFilter = $db->query('SELECT id, name, unique_id FROM patients ORDER BY name')->fetchAll();
+                foreach ($patientsFilter as $pf):
                 ?>
                     <option value="<?php echo (int)$pf['id']; ?>" <?php echo $patientId === (int)$pf['id'] ? 'selected' : ''; ?>>
                         <?php echo e($pf['name'] . ' (' . $pf['unique_id'] . ')'); ?>
                     </option>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </select>
         </form>
     </div>
@@ -79,10 +81,10 @@ include __DIR__ . '/includes/header.php';
         <table>
             <thead><tr><th>Date</th><th>Patient</th><th>BP</th><th>Temp</th><th>Diagnosis</th><th>Treatment</th><th>Actions</th></tr></thead>
             <tbody>
-            <?php if ($records->num_rows === 0): ?>
+            <?php if (count($records) === 0): ?>
                 <tr><td colspan="7" class="empty">No health records found yet.</td></tr>
             <?php else: ?>
-                <?php while ($r = $records->fetch_assoc()): ?>
+                <?php foreach ($records as $r): ?>
                     <tr>
                         <td><?php echo e($r['date']); ?></td>
                         <td><?php echo e($r['patient_name']); ?></td>
@@ -100,7 +102,7 @@ include __DIR__ . '/includes/header.php';
                             </form>
                         </td>
                     </tr>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             <?php endif; ?>
             </tbody>
         </table>

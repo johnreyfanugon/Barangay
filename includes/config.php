@@ -20,10 +20,11 @@ define('APP_NAME', envValue('APP_NAME', 'Barangay Community Health Check Details
 define('APP_ENV', envValue('APP_ENV', 'development'));
 define('BASE_URL', rtrim(envValue('BASE_URL', ''), '/'));
 
-define('DB_HOST', envValue('DB_HOST', '127.0.0.1'));
-define('DB_PORT', envValue('DB_PORT', '3306'));
-define('DB_NAME', envValue('DB_NAME', 'barangay_health'));
-define('DB_USER', envValue('DB_USER', 'root'));
-define('DB_PASS', envValue('DB_PASS', ''));
+define('DATABASE_URL', envValue('DATABASE_URL', ''));
+define('PGHOST', envValue('PGHOST', '127.0.0.1'));
+define('PGPORT', envValue('PGPORT', '5432'));
+define('PGDATABASE', envValue('PGDATABASE', 'barangay_details'));
+define('PGUSER', envValue('PGUSER', 'postgres'));
+define('PGPASSWORD', envValue('PGPASSWORD', ''));
 
 define('REMEMBER_DAYS', 14);

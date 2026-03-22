@@ -30,16 +30,12 @@ if ($action === 'create' || $action === 'update') {
 
     if ($action === 'create') {
         $stmt = $db->prepare('INSERT INTO health_records (patient_id, date, bp, temp, symptoms, diagnosis, treatment) VALUES (?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('issdsss', $patientId, $date, $bp, $temp, $symptoms, $diagnosis, $treatment);
-        $stmt->execute();
-        $stmt->close();
+        $stmt->execute([$patientId, $date, $bp, (float)$temp, $symptoms, $diagnosis, $treatment]);
         setFlash('success', 'Health record created.');
         redirect('../health_records.php?patient_id=' . $patientId);
     } else {
         $stmt = $db->prepare('UPDATE health_records SET patient_id = ?, date = ?, bp = ?, temp = ?, symptoms = ?, diagnosis = ?, treatment = ? WHERE id = ?');
-        $stmt->bind_param('issdsssi', $patientId, $date, $bp, $temp, $symptoms, $diagnosis, $treatment, $id);
-        $stmt->execute();
-        $stmt->close();
+        $stmt->execute([$patientId, $date, $bp, (float)$temp, $symptoms, $diagnosis, $treatment, $id]);
         setFlash('success', 'Health record updated.');
         redirect('../health_records.php?patient_id=' . $patientId);
     }
@@ -48,9 +44,7 @@ if ($action === 'create' || $action === 'update') {
 if ($action === 'delete') {
     $id = (int)($_POST['id'] ?? 0);
     $stmt = $db->prepare('DELETE FROM health_records WHERE id = ?');
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $stmt->close();
+    $stmt->execute([$id]);
     setFlash('success', 'Health record deleted.');
     redirect('../health_records.php');
 }

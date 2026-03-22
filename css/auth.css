@@ -10,8 +10,7 @@ body {
       linear-gradient(130deg, #9cd9ff, #d6f7dc, #f2fff4);
 }
 .auth-bg {
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.35), transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(45, 185, 85, .3), transparent 45%);
 }
@@ -27,14 +26,8 @@ body {
     margin: 0 auto;
 }
 .auth-card {
-    width: 100%;
-    max-width: 470px;
-    justify-self: end;
-    background: rgba(255,255,255,.62);
-    border: 1px solid rgba(255,255,255,.8);
-    backdrop-filter: blur(14px);
-    padding: 1.35rem;
-    border-radius: 18px;
+    width: 100%; max-width: 470px; justify-self: end; background: rgba(255,255,255,.62);
+    border: 1px solid rgba(255,255,255,.8); backdrop-filter: blur(14px); padding: 1.35rem; border-radius: 18px;
     box-shadow: 0 18px 40px rgba(36, 82, 50, .22);
     animation: rise .4s ease;
 }
@@ -67,6 +60,23 @@ body {
     padding: 0;
     list-style: none;
 }
+.hero-panel {
+    margin-top: 1rem;
+    background: rgba(255,255,255,.54);
+    border: 1px solid rgba(255,255,255,.85);
+    border-radius: 16px;
+    padding: .8rem .9rem;
+    box-shadow: 0 10px 24px rgba(38, 91, 58, .12);
+}
+.hero-panel h3 {
+    margin: 0 0 .45rem;
+    color: #165640;
+    font-size: 1.12rem;
+}
+.hero-panel p {
+    margin: 0;
+    font-size: .97rem;
+}
 .hero-points li {
     margin-bottom: .45rem;
     padding-left: 1.45rem;
@@ -86,11 +96,7 @@ body {
 .auth-card-head p { margin: .3rem 0 .7rem; color: #476251; }
 label { display: block; margin-top: .8rem; font-weight: 600; }
 input, button {
-    width: 100%;
-    border-radius: 11px;
-    border: 1px solid #bfddc5;
-    padding: .7rem .8rem;
-    font: inherit;
+    width: 100%; border-radius: 11px; border: 1px solid #bfddc5; padding: .7rem .8rem; font: inherit;
 }
 input:focus { outline: 2px solid #95d5ff; border-color: #8fd0f4; }
 .btn-main {
@@ -131,6 +137,7 @@ a:hover { text-decoration: underline; }
 .back-link { display: inline-block; margin-top: .9rem; }
 .hidden { display: none; }
 .auth-footnote { display: block; margin-top: .7rem; color: #4b6657; text-align: center; }
+
 .auth-orb {
     position: fixed;
     border-radius: 50%;
@@ -141,9 +148,11 @@ a:hover { text-decoration: underline; }
 }
 .orb-1 { width: 220px; height: 220px; background: #7dcfff; left: 5%; top: 12%; }
 .orb-2 { width: 280px; height: 280px; background: #8ef0b2; right: 4%; bottom: 10%; animation-delay: 1.4s; }
+
 @keyframes rise { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
 @media (max-width: 960px) {
     .auth-wrap { grid-template-columns: 1fr; }
     .auth-card { justify-self: center; }

@@ -10,7 +10,7 @@ $reportType = (string)($_GET['type'] ?? 'patients');
 $isPrint = isset($_GET['print']) && $_GET['print'] === '1';
 
 if ($reportType === 'summary') {
-    $data = $db->query('SELECT p.unique_id, p.name, COUNT(hr.id) AS checkups, MAX(hr.date) AS last_checkup FROM patients p LEFT JOIN health_records hr ON hr.patient_id = p.id GROUP BY p.id ORDER BY p.name');
+    $data = $db->query('SELECT p.unique_id, p.name, COUNT(hr.id) AS checkups, MAX(hr.date) AS last_checkup FROM patients p LEFT JOIN health_records hr ON hr.patient_id = p.id GROUP BY p.id, p.unique_id, p.name ORDER BY p.name');
 } else {
     $reportType = 'patients';
     $data = $db->query('SELECT unique_id, name, birthdate, gender, address, contact FROM patients ORDER BY name');
@@ -52,7 +52,7 @@ if ($isPrint):
             <?php endif; ?>
             </thead>
             <tbody>
-            <?php while ($row = $data->fetch_assoc()): ?>
+            <?php while ($row = $data->fetch()): ?>
                 <tr>
                     <?php foreach ($row as $cell): ?>
                         <td><?php echo e((string)$cell); ?></td>

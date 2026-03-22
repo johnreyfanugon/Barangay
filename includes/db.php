@@ -2,23 +2,40 @@
 declare(strict_types=1);
 require_once __DIR__ . '/config.php';
 
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-function getDb(): mysqli
+function getDb(): PDO
 {
     static $conn = null;
-    if ($conn instanceof mysqli) {
+    if ($conn instanceof PDO) {
         return $conn;
     }
 
     try {
-        $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, (int)DB_PORT);
-        $conn->set_charset('utf8mb4');
+        if (DATABASE_URL !== '') {
+            $parts = parse_url(DATABASE_URL);
+            $host = $parts['host'] ?? PGHOST;
+            $port = $parts['port'] ?? PGPORT;
+            $dbName = isset($parts['path']) ? ltrim($parts['path'], '/') : PGDATABASE;
+            $user = $parts['user'] ?? PGUSER;
+            $pass = $parts['pass'] ?? PGPASSWORD;
+        } else {
+            $host = PGHOST;
+            $port = PGPORT;
+            $dbName = PGDATABASE;
+            $user = PGUSER;
+            $pass = PGPASSWORD;
+        }
+
+        $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', $host, $port, $dbName);
+        $conn = new PDO($dsn, $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]);
         return $conn;
     } catch (Throwable $e) {
         http_response_code(500);
-        $hintHost = DB_HOST === '127.0.0.1' || DB_HOST === 'localhost'
-            ? 'Note: On Render/hosts, use an external MySQL host (not 127.0.0.1).'
+        $hintHost = (PGHOST === '127.0.0.1' || PGHOST === 'localhost') && DATABASE_URL === ''
+            ? 'Note: On Render, use your external PostgreSQL URL/host (not 127.0.0.1).'
             : '';
         ?>
         <!doctype html>
@@ -45,11 +62,10 @@ function getDb(): mysqli
                 <h1>We can’t reach the database</h1>
                 <p class="tips">Please verify these environment variables on your server/Render:</p>
                 <ul class="tips">
-                    <li>DB_HOST (should be your MySQL provider host, not 127.0.0.1 on Render)</li>
-                    <li>DB_PORT (usually 3306)</li>
-                    <li>DB_NAME</li>
-                    <li>DB_USER</li>
-                    <li>DB_PASS</li>
+                    <li>DATABASE_URL (recommended), or PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD</li>
+                    <li>PGHOST should be your PostgreSQL provider host</li>
+                    <li>PGPORT is usually 5432</li>
+                    <li>PGDATABASE / PGUSER / PGPASSWORD must match your Render Postgres values</li>
                 </ul>
                 <p class="tips"><?php echo htmlspecialchars($hintHost, ENT_QUOTES, 'UTF-8'); ?></p>
                 <p class="tips">Also ensure the schema has been imported: <code>database/schema.sql</code></p>

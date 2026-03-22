@@ -7,8 +7,8 @@ require_once __DIR__ . '/includes/functions.php';
 requireLogin();
 $db = getDb();
 
-$totalPatients = (int)$db->query('SELECT COUNT(*) AS c FROM patients')->fetch_assoc()['c'];
-$totalCheckups = (int)$db->query('SELECT COUNT(*) AS c FROM health_records')->fetch_assoc()['c'];
+$totalPatients = (int)$db->query('SELECT COUNT(*) AS c FROM patients')->fetch()['c'];
+$totalCheckups = (int)$db->query('SELECT COUNT(*) AS c FROM health_records')->fetch()['c'];
 $commonIllness = $db->query("SELECT diagnosis, COUNT(*) c FROM health_records GROUP BY diagnosis ORDER BY c DESC LIMIT 5");
 $recentCheckups = $db->query("SELECT hr.id, p.name AS patient_name, hr.date, hr.diagnosis FROM health_records hr INNER JOIN patients p ON p.id = hr.patient_id ORDER BY hr.date DESC LIMIT 8");
 
@@ -27,7 +27,7 @@ include __DIR__ . '/includes/header.php';
         <canvas id="illnessChart" aria-label="Most common illnesses chart"></canvas>
         <script>
             window.illnessData = [
-                <?php while ($row = $commonIllness->fetch_assoc()): ?>
+                <?php while ($row = $commonIllness->fetch()): ?>
                 {label: "<?php echo e($row['diagnosis'] ?: 'Unspecified'); ?>", value: <?php echo (int)$row['c']; ?>},
                 <?php endwhile; ?>
             ];
@@ -39,7 +39,7 @@ include __DIR__ . '/includes/header.php';
             <table>
                 <thead><tr><th>Date</th><th>Patient</th><th>Diagnosis</th></tr></thead>
                 <tbody>
-                <?php while ($row = $recentCheckups->fetch_assoc()): ?>
+                <?php while ($row = $recentCheckups->fetch()): ?>
                     <tr>
                         <td><?php echo e($row['date']); ?></td>
                         <td><?php echo e($row['patient_name']); ?></td>

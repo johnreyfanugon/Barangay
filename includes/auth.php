@@ -35,12 +35,9 @@ function requireRole(array $roles): void
 function loginUserByEmailPassword(string $email, string $password, bool $rememberMe): bool
 {
     $db = getDb();
-    $stmt = $db->prepare('SELECT id, name, email, password, role FROM users WHERE email = ? LIMIT 1');
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    $user = $res->fetch_assoc();
-    $stmt->close();
+    $stmt = $db->prepare('SELECT id, name, email, password, role FROM users WHERE email = :email LIMIT 1');
+    $stmt->execute(['email' => $email]);
+    $user = $stmt->fetch();
 
     if (!$user || !password_verify($password, $user['password'])) {
         return false;
