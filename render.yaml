@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: barangay-health-system
+    env: docker
+    plan: free
+    autoDeploy: true
