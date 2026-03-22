@@ -67,7 +67,12 @@ Steps:
    - `APP_ENV=production`
    - `APP_NAME=Barangay Community Health Check Details System`
    - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`
+   - Do not set `DB_HOST` to `127.0.0.1` on Render; use your external MySQL host.
 5. Use an external MySQL provider (Render does not provide managed MySQL in all plans/regions), then import `database/schema.sql`.
+
+### Troubleshooting “Connection refused”
+- If you see “Connection refused” on Render, it usually means the service is trying to reach MySQL at `127.0.0.1`. Set `DB_HOST` to your provider’s hostname and ensure network access/allowlisting is correct.
+- The app now shows a friendly error screen with tips if the DB is unreachable.
 
 ## Feature Highlights
 

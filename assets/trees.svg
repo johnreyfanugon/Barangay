@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#6fd3ff"/>
+      <stop offset="1" stop-color="#b9f3c8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="220" fill="url(#g)"/>
+  <g opacity="0.25" fill="#1b5e20">
+    <polygon points="80,210 110,130 140,210"/>
+    <rect x="106" y="210" width="8" height="10"/>
+    <polygon points="200,210 230,140 260,210"/>
+    <rect x="226" y="210" width="8" height="10"/>
+    <polygon points="320,210 350,120 380,210"/>
+    <rect x="346" y="210" width="8" height="10"/>
+    <polygon points="460,210 485,140 510,210"/>
+    <rect x="481" y="210" width="8" height="10"/>
+    <polygon points="600,210 625,110 650,210"/>
+    <rect x="621" y="210" width="8" height="10"/>
+    <polygon points="740,210 765,130 790,210"/>
+    <rect x="761" y="210" width="8" height="10"/>
+    <polygon points="880,210 905,150 930,210"/>
+    <rect x="901" y="210" width="8" height="10"/>
+    <polygon points="1020,210 1045,120 1070,210"/>
+    <rect x="1041" y="210" width="8" height="10"/>
+  </g>
+</svg>

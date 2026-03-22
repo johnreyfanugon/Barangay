@@ -4,7 +4,10 @@ body {
     font-family: Inter, sans-serif;
     color: #1f2c23;
     min-height: 100vh;
-    background: linear-gradient(130deg, #9ce2a9, #d6f7dc, #f2fff4);
+    background:
+      url('/assets/trees.svg') bottom left / cover no-repeat fixed,
+      radial-gradient(1200px 600px at -10% 110%, rgba(43,139,214,.18), transparent 60%),
+      linear-gradient(130deg, #9cd9ff, #d6f7dc, #f2fff4);
 }
 .auth-bg {
     position: fixed; inset: 0;
@@ -27,9 +30,9 @@ input, button {
 }
 input:focus { outline: 2px solid #aee7b8; }
 .btn-main {
-    border: none; margin-top: 1rem; background: #24863c; color: #fff; font-weight: 700; cursor: pointer;
+    border: none; margin-top: 1rem; background: linear-gradient(135deg, #24863c, #2b8bd6); color: #fff; font-weight: 700; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
 }
-.btn-main:hover { background: #1e7433; }
+.btn-main:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(43, 139, 214, .18); }
 .password-group { display: flex; gap: .4rem; }
 .password-group button { max-width: 92px; background: #e6f4e9; cursor: pointer; }
 .auth-row { display: flex; justify-content: space-between; margin-top: .7rem; font-size: .92rem; }
